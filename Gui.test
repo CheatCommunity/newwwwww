@@ -1,44 +1,58 @@
--- Pet Spawner GUI Script
-local player = game.Players.LocalPlayer
-local replicatedStorage = game:GetService("ReplicatedStorage")
-local petName = "Dog" -- Make sure this pet model exists in ReplicatedStorage
+-- Pet Spawner GUI for Executors (client-side only)
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local Button = Instance.new("TextButton")
 
--- Create GUI elements
-local screenGui = script.Parent
+-- Properties
+ScreenGui.Name = "PetSpawnerGUI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game.CoreGui
 
--- Title Label
-local title = Instance.new("TextLabel")
-title.Text = "🐾 Pet Spawner!"
-title.Size = UDim2.new(0.4, 0, 0.1, 0)
-title.Position = UDim2.new(0.3, 0, 0.1, 0)
-title.BackgroundColor3 = Color3.fromRGB(255, 200, 255)
-title.TextScaled = true
-title.Font = Enum.Font.GothamBold
-title.TextColor3 = Color3.fromRGB(0, 0, 0)
-title.Parent = screenGui
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+Frame.Position = UDim2.new(0.35, 0, 0.3, 0)
+Frame.Size = UDim2.new(0, 300, 0, 200)
+Frame.Active = true
+Frame.Draggable = true
 
--- Spawn Button
-local spawnButton = Instance.new("TextButton")
-spawnButton.Text = "Spawn Pet"
-spawnButton.Size = UDim2.new(0.3, 0, 0.1, 0)
-spawnButton.Position = UDim2.new(0.35, 0, 0.25, 0)
-spawnButton.BackgroundColor3 = Color3.fromRGB(200, 255, 200)
-spawnButton.TextScaled = true
-spawnButton.Font = Enum.Font.Gotham
-spawnButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-spawnButton.Parent = screenGui
+Title.Parent = Frame
+Title.Text = "🐾 Pet Spawner for Adopt Me!"
+Title.Size = UDim2.new(1, 0, 0.3, 0)
+Title.BackgroundColor3 = Color3.fromRGB(255, 200, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextColor3 = Color3.fromRGB(0, 0, 0)
+Title.TextScaled = true
 
--- Button Click Function
-spawnButton.MouseButton1Click:Connect(function()
-	local pet = replicatedStorage:FindFirstChild(petName)
-	if pet then
-		local clone = pet:Clone()
-		clone.Parent = workspace
-		local char = player.Character
-		if char and char:FindFirstChild("HumanoidRootPart") then
-			clone:SetPrimaryPartCFrame(char.HumanoidRootPart.CFrame * CFrame.new(3, 0, 0))
-		end
-	else
-		warn("Pet model '" .. petName .. "' not found in ReplicatedStorage.")
-	end
+Button.Parent = Frame
+Button.Text = "Spawn Pet"
+Button.Position = UDim2.new(0.2, 0, 0.5, 0)
+Button.Size = UDim2.new(0.6, 0, 0.25, 0)
+Button.BackgroundColor3 = Color3.fromRGB(200, 255, 200)
+Button.Font = Enum.Font.Gotham
+Button.TextScaled = true
+Button.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- Fake pet spawn (client-side visual only)
+Button.MouseButton1Click:Connect(function()
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        local fakePet = Instance.new("Part")
+        fakePet.Name = "FakePet"
+        fakePet.Size = Vector3.new(2, 2, 2)
+        fakePet.Position = character.HumanoidRootPart.Position + Vector3.new(3, 0, 0)
+        fakePet.Anchored = true
+        fakePet.BrickColor = BrickColor.new("Pastel brown")
+        fakePet.Parent = workspace
+
+        local label = Instance.new("BillboardGui", fakePet)
+        label.Size = UDim2.new(0, 100, 0, 40)
+        label.AlwaysOnTop = true
+        local nameTag = Instance.new("TextLabel", label)
+        nameTag.Text = "🐶 Your Pet"
+        nameTag.Size = UDim2.new(1, 0, 1, 0)
+        nameTag.BackgroundTransparency = 1
+        nameTag.TextColor3 = Color3.fromRGB(0, 0, 0)
+        nameTag.TextScaled = true
+    end
 end)
